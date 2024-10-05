@@ -24,7 +24,26 @@ class TestLongTakeProfit(unittest.TestCase):
 
 
     def test_prices(self):
-        agent = LongTakeProfit(0.1, 0)
+        agent = LongTakeProfit(0.1, -1)
+
+        posId1 = agent.open(100.0)
+        posId2 = agent.open(100.0)
+        posId3 = agent.open(200.0)
+
+        empty = agent.processPrice(99)
+        self.assertTrue(len(empty) == 0)
+
+        pos1And2 = agent.processPrice(111)
+        self.assertTrue(len(pos1And2) == 2)
+        self.assertTrue(
+            (pos1And2[0] == posId1 and pos1And2[1] == posId2)
+            or
+            (pos1And2[0] == posId2 and pos1And2[1] == posId1))
+
+        onlyPosId3 = agent.processPrice(240)
+        self.assertTrue(len(onlyPosId3) == 1 and onlyPosId3[0] == posId3)
+
+
 
     def test_openAndPricesUlimitedPositions(self):
         agent = LongTakeProfit(0.1, -1)
