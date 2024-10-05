@@ -1,5 +1,6 @@
 import unittest
 import main.agents
+import numpy as np
 from main.agents.longTakeProfit import LongTakeProfit
 
 class TestLongTakeProfit(unittest.TestCase):
@@ -46,8 +47,35 @@ class TestLongTakeProfit(unittest.TestCase):
 
 
     def test_openAndPricesUlimitedPositions(self):
-        agent = LongTakeProfit(0.1, -1)
+        agent = LongTakeProfit(1, -1)
+
+        prices = np.random.rand(1000)
+        maxPrice = 0
+        for p in prices:
+            p = p + 0.01
+            agent.open(p)
+            ans = agent.processPrice(p)
+            for i in range(0, len(ans)):
+                agent.open(p)
+            maxPrice = max(p, maxPrice)
+
+        pos = agent.processPrice(maxPrice * 3)
+        self.assertEqual(len(pos), len(prices))
 
 
     def test_openAndPricesThreeMaxPositions(self):
         agent = LongTakeProfit(0.1, 3)
+        prices = np.random.rand(1000)
+        maxPrice = 0
+        for p in prices:
+            p = p + 0.01
+            agent.open(p)
+            ans = agent.processPrice(p)
+            for i in range(0, len(ans)):
+                agent.open(p)
+            maxPrice = max(p, maxPrice)
+
+        pos = agent.processPrice(maxPrice * 3)
+        self.assertEqual(len(pos), 3)
+
+
