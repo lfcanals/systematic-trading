@@ -1,3 +1,3 @@
-base=$(dirname $0)
+base=.
 python -m venv ${base}
 source ${base}/bin/activate
